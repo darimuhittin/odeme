@@ -1,7 +1,9 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-
+use App\Http\Controllers\OdemeController;
+use App\Http\Controllers\AdminController;
+use App\Http\Controllers\HomeController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -13,6 +15,11 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+Route::get('/', [HomeController::class, 'index']);
+Route::post('/', [HomeController::class, 'search']);
+Route::get('/odemeler/{odeme:code}', [OdemeController::class, 'show']);
+Route::prefix('admin')->group(function () {
+    Route::get('/', [AdminController::class, 'index']);
+    Route::get('/dashboard', [AdminController::class, 'dashboard']);
+    Route::get('/odemeler', [OdemeController::class, 'index']);
 });
