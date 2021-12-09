@@ -26,16 +26,25 @@ Route::get('/odemeler/{odeme:kod}', [OdemeController::class, 'show'])->missing(
         return redirect('/')->withErrors(['kod' => 'Hatalı kod.']);
     }
 );
+
+Route::get('/odemeler/{odeme:kod}/tamamla', [OdemeController::class, 'pay'])->missing(
+    function (Request $req) {
+        return redirect('/')->withErrors(['kod' => 'Hatalı kod.']);
+    }
+);
+
+Route::post('/odemeler/{odeme:kod}/tamamla', [OdemeController::class, 'complete_pay']);
+
 Route::prefix('admin')->group(function () {
     Route::get('/', [AdminController::class, 'index'])->middleware('guest');
     Route::post('/', [AdminController::class, 'login'])->middleware('guest');
     Route::get('/dashboard', [AdminController::class, 'dashboard']);
     Route::get('/odemeler', [OdemeController::class, 'index']);
 
-    Route::get('/cariler',[CariController::class,'index']);
-    Route::get('/cariler/create',[CariController::class,'create']);
-    Route::post('/cariler',[CariController::class,'store']);
+    Route::get('/cariler', [CariController::class, 'index']);
+    Route::get('/cariler/create', [CariController::class, 'create']);
+    Route::post('/cariler', [CariController::class, 'store']);
 
-    Route::get('/cariler/{cari:slug}/odemeler/create',[OdemeController::class,'create']);
-    Route::post('/cariler/{cari:slug}/odemeler',[OdemeController::class,'store']);
+    Route::get('/cariler/{cari:slug}/odemeler/create', [OdemeController::class, 'create']);
+    Route::post('/cariler/{cari:slug}/odemeler', [OdemeController::class, 'store']);
 });

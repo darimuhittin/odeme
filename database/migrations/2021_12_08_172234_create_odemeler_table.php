@@ -17,6 +17,7 @@ class CreateOdemelerTable extends Migration
             $table->id();
             $table->string('kod');
             $table->double('tutar');
+            $table->string('aciklama');
             $table->foreignId('cari_id');
             $table->timestamps();
         });

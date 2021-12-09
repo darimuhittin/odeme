@@ -7,6 +7,7 @@
             <form action="/admin/cariler/{{ $cari->slug}}/odemeler" method="POST">
                 @csrf
                 <x-form-input for="tutar" />
+                <x-form-input for="açıklama" />
 
                 <x-form-submit>Oluştur</x-form-submit>
             </form>

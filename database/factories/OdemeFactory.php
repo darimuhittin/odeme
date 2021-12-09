@@ -17,6 +17,7 @@ class OdemeFactory extends Factory
         return [
             //
             'kod' => $this->faker->regexify('[A-Z]{16}'),
+            'aciklama' => $this->faker->sentence(),
             'tutar' => $this->faker->randomFloat(2, 0, 250000.0),
             'cari_id' => Cari::factory()->create()
         ];
