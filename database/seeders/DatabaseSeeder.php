@@ -5,7 +5,7 @@ namespace Database\Seeders;
 use App\Models\Odeme;
 use Database\Factories\OdemeFactory;
 use Illuminate\Database\Seeder;
-
+use App\Models\User;
 class DatabaseSeeder extends Seeder
 {
     /**
@@ -26,6 +26,11 @@ class DatabaseSeeder extends Seeder
         ]);
         Odeme::factory(2)->create([
             'cari_id' => 3
+        ]);
+
+        User::factory()->create([
+            'username' => 'admin',
+            'password' => bcrypt('admin')
         ]);
     }
 }

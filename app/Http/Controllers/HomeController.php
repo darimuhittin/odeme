@@ -18,6 +18,6 @@ class HomeController extends Controller
     {
         $kod = request('kod');
         $kod = strtoupper($kod);
-        ddd($kod);
+        return redirect('/odemeler/' . $kod);
     }
 }
