@@ -5,9 +5,13 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Odeme;
 use App\Models\Cari;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Redirect;
 
 class OdemeController extends Controller
 {
+    private $url = 'https://service.refmoka.com/PaymentDealer/DoDirectPaymentThreeD';
     //
     public function index()
     {
@@ -28,7 +32,7 @@ class OdemeController extends Controller
         ]);
     }
 
-    public function complete_pay()
+    public function complete_pay(Odeme $odeme)
     {
         $val = request()->validate([
             'fullname' => ['min:3', 'max:255', 'required'],
@@ -41,11 +45,10 @@ class OdemeController extends Controller
 
         $arr = [
             'PaymentDealerAuthentication' => [
-                'DealerCode' => 'mokadan verilen bayii kodu (string)',
-                'Username' => 'mokadan verilen api kullanici adi (string)',
-                'Password' => 'mokadan verilen api sifresi (string)',
-                'CheckKey' => 'Kontrol anahtarı (DealerCode + "MK" + Username + "PD" + Password) String olarak birleştirilen bu bilgilerin SHA-256 hash algoritmasından geçirilmesiyle oluşturulur.
-                Buraya tıklayarak deneme ekranına gidebilirsiniz.'
+                'DealerCode' => '16832', //bayi kodu string
+                'Username' => 'darimuhittin@gmail.com', //'mokadan verilen api kullanici adi (string)',
+                'Password' => '139addd80e24', //'mokadan verilen api sifresi (string)',
+                'CheckKey' => Hash::make('16832' . 'MK' . 'darimuhittin@gmail.com' . 'PD' . '139addd80e24'), //'Kontrol anahtarı (DealerCode + "MK" + Username + "PD" + Password) String olarak birleştirilen bu bilgilerin SHA-256 hash algoritmasından geçirilmesiyle oluşturulur.'
             ],
             'PaymentDealerRequest' => [
                 'CardHolderFullName' => $val['fullname'],
@@ -54,22 +57,37 @@ class OdemeController extends Controller
                 'ExpYear' => $val['year'],
                 'CvcNumber' => $val['cvc'],
                 'CardToken' => '',
-                'Amount' => '',
+                'Amount' => $val['amount'],
                 'Currency' => '',
                 'InstallmentNumber' => '',
-                'ClientIP' => '',
+                'ClientIP' => request()->server('SERVER_ADDR'),   // IP
                 'OtherTrxCode' => '',
-                'SubMerchantName' => '',
-                'IsPoolPayment' => '',
-                'IsTokenized' => '',
+                'SubMerchantName' => 'EKSTRE ISMI',
+                'IsPoolPayment' => 0,
+                'IsPreAuth' => 0,
+                'IsTokenized' => 0,
                 'IntegratorId' => '',
-                'Software' => '',
-                'Description' => '',
-                'IsPreAuth' => '',
+                'Software' => 'DARISOFT',
+                'Description' => $odeme->aciklama,
+                'ReturnHash' => 1,
+                'RedirectUrl' => 'www.darisoft.com/odemeler/' . $odeme->kod . '/sonuc', // redirect
+                'RedirectType' => 0,
+                'BuyerInformation' => [],
+                'BasketProduct' => [],
+                'CustomerInformation' => [],
             ]
         ];
 
-        ddd($val);
+        $res = Http::post($this->url, $arr);
+
+        ddd($res);
+        if ($res['ResultCode'] == 'Success') {
+            Redirect::away($res['Data']);
+        }
+    }
+
+    public function sonuc(Odeme $odeme)
+    {
     }
     public function create(Cari $cari)
     {
