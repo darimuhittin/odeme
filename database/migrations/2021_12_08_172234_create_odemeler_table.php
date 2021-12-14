@@ -19,6 +19,7 @@ class CreateOdemelerTable extends Migration
             $table->double('tutar');
             $table->string('aciklama');
             $table->foreignId('cari_id');
+            $table->boolean('odendi_mi')->default(false);
             $table->timestamps();
         });
     }

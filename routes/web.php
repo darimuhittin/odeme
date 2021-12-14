@@ -34,7 +34,7 @@ Route::get('/odemeler/{odeme:kod}/tamamla', [OdemeController::class, 'pay'])->mi
 );
 
 Route::post('/odemeler/{odeme:kod}/tamamla', [OdemeController::class, 'complete_pay']);
-Route::post('/odemeler/{odeme:kod}/sonuc', [OdemeController::class, 'sonuc']);
+Route::get('/odemeler/{odeme:kod}/sonuc', [OdemeController::class, 'sonuc']);
 
 Route::prefix('admin')->group(function () {
     Route::get('/', [AdminController::class, 'index'])->middleware('guest');

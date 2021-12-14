@@ -15,7 +15,9 @@ class OdemeController extends Controller
     //
     public function index()
     {
-        return "show all";
+        return view('admin.odemeler', [
+            'odemeler' => Odeme::all()
+        ]);
     }
 
     public function show(Odeme $odeme)
@@ -43,51 +45,65 @@ class OdemeController extends Controller
             'amount' => ['required'],
         ]);
 
-        $arr = [
-            'PaymentDealerAuthentication' => [
-                'DealerCode' => '16832', //bayi kodu string
-                'Username' => 'darimuhittin@gmail.com', //'mokadan verilen api kullanici adi (string)',
-                'Password' => '139addd80e24', //'mokadan verilen api sifresi (string)',
-                'CheckKey' => Hash::make('16832' . 'MK' . 'darimuhittin@gmail.com' . 'PD' . '139addd80e24'), //'Kontrol anahtarı (DealerCode + "MK" + Username + "PD" + Password) String olarak birleştirilen bu bilgilerin SHA-256 hash algoritmasından geçirilmesiyle oluşturulur.'
-            ],
-            'PaymentDealerRequest' => [
-                'CardHolderFullName' => $val['fullname'],
-                'CardNumber' => $val['cardnumber'],
-                'ExpMonth' => $val['month'],
-                'ExpYear' => $val['year'],
-                'CvcNumber' => $val['cvc'],
-                'CardToken' => '',
-                'Amount' => $val['amount'],
-                'Currency' => '',
-                'InstallmentNumber' => '',
-                'ClientIP' => request()->server('SERVER_ADDR'),   // IP
-                'OtherTrxCode' => '',
-                'SubMerchantName' => 'EKSTRE ISMI',
-                'IsPoolPayment' => 0,
-                'IsPreAuth' => 0,
-                'IsTokenized' => 0,
-                'IntegratorId' => '',
-                'Software' => 'DARISOFT',
-                'Description' => $odeme->aciklama,
-                'ReturnHash' => 1,
-                'RedirectUrl' => 'www.darisoft.com/odemeler/' . $odeme->kod . '/sonuc', // redirect
-                'RedirectType' => 0,
-                'BuyerInformation' => [],
-                'BasketProduct' => [],
-                'CustomerInformation' => [],
-            ]
-        ];
+        $odeme['odendi_mi'] = true;
 
-        $res = Http::post($this->url, $arr);
+        $odeme->save();
 
-        ddd($res);
-        if ($res['ResultCode'] == 'Success') {
-            Redirect::away($res['Data']);
-        }
+        return redirect('/odemeler/' . $odeme->kod . '/sonuc');
+        // $arr = [
+        //     'PaymentDealerAuthentication' => [
+        //         'DealerCode' => '16832', //bayi kodu string
+        //         'Username' => 'darimuhittin@gmail.com', //'mokadan verilen api kullanici adi (string)',
+        //         'Password' => '139addd80e24', //'mokadan verilen api sifresi (string)',
+        //         'CheckKey' => Hash::make('16832' . 'MK' . 'darimuhittin@gmail.com' . 'PD' . '139addd80e24'), //'Kontrol anahtarı (DealerCode + "MK" + Username + "PD" + Password) String olarak birleştirilen bu bilgilerin SHA-256 hash algoritmasından geçirilmesiyle oluşturulur.'
+        //     ],
+        //     'PaymentDealerRequest' => [
+        //         'CardHolderFullName' => $val['fullname'],
+        //         'CardNumber' => $val['cardnumber'],
+        //         'ExpMonth' => $val['month'],
+        //         'ExpYear' => $val['year'],
+        //         'CvcNumber' => $val['cvc'],
+        //         'CardToken' => '',
+        //         'Amount' => $val['amount'],
+        //         'Currency' => '',
+        //         'InstallmentNumber' => '',
+        //         'ClientIP' => request()->server('SERVER_ADDR'),   // IP
+        //         'OtherTrxCode' => '',
+        //         'SubMerchantName' => 'EKSTRE ISMI',
+        //         'IsPoolPayment' => 0,
+        //         'IsPreAuth' => 0,
+        //         'IsTokenized' => 0,
+        //         'IntegratorId' => '',
+        //         'Software' => 'DARISOFT',
+        //         'Description' => $odeme->aciklama,
+        //         'ReturnHash' => 1,
+        //         'RedirectUrl' => 'www.darisoft.com/odemeler/' . $odeme->kod . '/sonuc', // redirect
+        //         'RedirectType' => 0,
+        //         'BuyerInformation' => [],
+        //         'BasketProduct' => [],
+        //         'CustomerInformation' => [],
+        //     ]
+        // ];
+
+        // $res = Http::post($this->url, $arr);
+
+        // ddd($res);
+        // if ($res['ResultCode'] == 'Success') {
+        //     Redirect::away($res['Data']);
+        // }
+
+
+
+        // LETS SAY IT'S OK.
+
+
     }
 
     public function sonuc(Odeme $odeme)
     {
+        return view('odemeler.sonuc', [
+            'odeme' => $odeme
+        ]);
     }
     public function create(Cari $cari)
     {
