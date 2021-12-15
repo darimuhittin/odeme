@@ -48,4 +48,6 @@ Route::prefix('admin')->group(function () {
 
     Route::get('/cariler/{cari:slug}/odemeler/create', [OdemeController::class, 'create']);
     Route::post('/cariler/{cari:slug}/odemeler', [OdemeController::class, 'store']);
+
+    Route::post('/logout', [SessionController::class, 'destroy']);
 });
