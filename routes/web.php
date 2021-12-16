@@ -5,6 +5,7 @@ use App\Http\Controllers\OdemeController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\CariController;
+use App\Http\Controllers\SessionController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Illuminate\Support\Facades\Redirect;
@@ -35,7 +36,7 @@ Route::get('/odemeler/{odeme:kod}/tamamla', [OdemeController::class, 'pay'])->mi
 
 Route::post('/odemeler/{odeme:kod}/tamamla', [OdemeController::class, 'complete_pay']);
 Route::get('/odemeler/{odeme:kod}/sonuc', [OdemeController::class, 'sonuc']);
-
+Route::post('/admin/logout', [SessionController::class, 'destroy']);
 Route::prefix('admin')->group(function () {
     Route::get('/', [AdminController::class, 'index'])->middleware('guest');
     Route::post('/', [AdminController::class, 'login'])->middleware('guest');
@@ -49,5 +50,5 @@ Route::prefix('admin')->group(function () {
     Route::get('/cariler/{cari:slug}/odemeler/create', [OdemeController::class, 'create']);
     Route::post('/cariler/{cari:slug}/odemeler', [OdemeController::class, 'store']);
 
-    Route::post('/logout', [SessionController::class, 'destroy']);
+    // Route::post('/logout', [SessionController::class, 'destroy']);
 });

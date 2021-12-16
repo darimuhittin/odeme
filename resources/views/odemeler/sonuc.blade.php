@@ -12,6 +12,10 @@
         </div>
 
         <p>Yukarıda bilgileri verilen ödemeniz başarı ile gerçekleştirilmiştir.</p>
-        {{ ddd($odeme) }}
+
+        <div class="flex">
+            <a class="ml-auto border px-4 py-1 mt-4" href="/">Ana Sayfa</a>
+
+        </div>
     </div>
 </x-layout>

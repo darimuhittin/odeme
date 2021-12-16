@@ -14,7 +14,7 @@
                         KOD : <h1 class="cursor-pointer hover:text-green-400" @click="show=true;setTimeout(()=>show=false,1000)"  onclick="copyClip(this)" >
                             {{ $odeme->kod }}
                         </h1>
-                            <div x-show="show" class="text-pink-700 bg-green-200 px-4 text-sm rounded-xl rounded-tl-none" >Kod kopyalandi !</div>
+                            <div x-show="show" class="text-pink-700 bg-green-200 px-4 text-sm rounded-xl rounded-tl-none" style="display: none" >Kod kopyalandi !</div>
                     </div>
                     <p>{{ $odeme->aciklama }}</p>
                     <h2>Odeyecek kisi :</h2>
@@ -24,18 +24,21 @@
                         <p>TELEFON : {{ $odeme->cari->telefon }}</p>
                         <p>SLUG : {{ $odeme->cari->slug }}</p>
                     </div>
-                    <p>{{ $odeme->tutar }}</p>
-                    @if ($odeme->odendi_mi)
-                    <div class="flex bg-green-400 p-2 items-center">
+                    <div class="flex">
+                        <p class="ml-auto text-xl text-green-800 text-bold">{{ $odeme->tutar }} TL</p>
 
-                        <i class="fas fa-check"></i>
-                        <p class="block ml-auto">{{ $odeme->updated_at->diffForHumans() }} ödendi</p>
                     </div>
-                    @else
-                        <div class="flex bg-red-400 p-2 items-center">
-                            <i class="fas fa-times-square"></i>
-                            <p class="block ml-auto">Ödeme bekleniyor.</p>
+                    @if ($odeme->odendi_mi)
+                        <div class="flex bg-green-400 p-2 items-center">
+
+                            <i class="fas fa-check"></i>
+                            <p class="block ml-auto">{{ $odeme->updated_at->diffForHumans() }} ödendi</p>
                         </div>
+                    @else
+                            <div class="flex bg-red-400 p-2 items-center">
+                                <i class="fas fa-times-square"></i>
+                                <p class="block ml-auto">Ödeme bekleniyor.</p>
+                            </div>
                     @endif
 
                 </div>
